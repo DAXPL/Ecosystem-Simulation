@@ -1,0 +1,2 @@
+C:\Programowanie\SFML\Ecosystem\Debug\Ecosystem.exe
+C:\Programowanie\SFML\Ecosystem-Simulation\Debug\Ecosystem.exe

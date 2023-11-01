@@ -1,0 +1,3 @@
+﻿  Ecosystem.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(1127,5): error MSB6006: Polecenie „link.exe” zakończone przez kod 1181.
+LINK : fatal error LNK1181: nie można otworzyć pliku wejściowego „sfml-graphic.lib”
