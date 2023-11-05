@@ -1,16 +1,24 @@
 ﻿#include <iostream>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-
+#include "Hare.h"
+#include "Tile.h"
 sf::CircleShape shape(300.f);
 
 void Draw(sf::RenderWindow* window);
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML works!");
+    Tile* t = new Tile(75);
+    
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Simulation");
     shape.setFillColor(sf::Color::Green);
 
+    for (int i = 0; i < 10; i++) 
+    {
+        t->AddHare(new Hare());
+    }
+    t->PrintOutHares();
     while (window.isOpen())
     {
         sf::Event event;
@@ -22,6 +30,7 @@ int main()
         Draw(&window);
     }
 
+    delete(t);
     return 0;
 }
 
