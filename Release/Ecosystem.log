@@ -1,3 +1,9 @@
-﻿  Ecosystem.cpp
-C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(1127,5): error MSB6006: Polecenie „link.exe” zakończone przez kod 1181.
-LINK : fatal error LNK1181: nie można otworzyć pliku wejściowego „sfml-graphic.lib”
+﻿  Tile.cpp
+C:\Programowanie\SFML\Ecosystem-Simulation\Tile.cpp(45,28): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Programowanie\SFML\Ecosystem-Simulation\Tile.cpp(45,25): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+  Trwa generowanie kodu
+  6 of 94 functions ( 6.4%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
+  Zakończono generowanie kodu
+  Ecosystem.vcxproj -> C:\Programowanie\SFML\Ecosystem-Simulation\Release\Ecosystem.exe

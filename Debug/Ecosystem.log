@@ -1,5 +1,8 @@
 ﻿  Ecosystem.cpp
-  Hare.cpp
+C:\Programowanie\SFML\Ecosystem-Simulation\Ecosystem.cpp(64,26): warning C4154: usunięcie wyrażenia tablicowego; dostarczono konwersji do wskaźnika
+C:\Programowanie\SFML\Ecosystem-Simulation\Ecosystem.cpp(67,19): warning C4154: usunięcie wyrażenia tablicowego; dostarczono konwersji do wskaźnika
   Tile.cpp
+C:\Programowanie\SFML\Ecosystem-Simulation\Tile.cpp(45,28): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Programowanie\SFML\Ecosystem-Simulation\Tile.cpp(45,25): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
   Generowanie kodu...
   Ecosystem.vcxproj -> C:\Programowanie\SFML\Ecosystem-Simulation\Debug\Ecosystem.exe

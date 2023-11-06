@@ -3,40 +3,67 @@
 #include <SFML/Graphics.hpp>
 #include "Hare.h"
 #include "Tile.h"
-sf::CircleShape shape(300.f);
 
-void Draw(sf::RenderWindow* window);
+const int TILES_ROWS{3};
+const int TILES_COLUMS{3};
+const int TILES_SIZE{ 10 };
+const int TILES_MARGIN{ 0 };
 
 int main()
 {
-    Tile* t = new Tile(75);
+    Tile* tiles[TILES_ROWS][TILES_COLUMS] =
+    {
+        {new Tile(75),new Tile(75),new Tile(75)},
+        {new Tile(75),new Tile(75),new Tile(75)},
+        {new Tile(75),new Tile(75),new Tile(75)}
+    };
     
     sf::RenderWindow window(sf::VideoMode(800, 600), "Simulation");
-    shape.setFillColor(sf::Color::Green);
 
     for (int i = 0; i < 10; i++) 
     {
-        t->AddHare(new Hare());
+        tiles[0][0]->AddHare(new Hare());
     }
-    t->PrintOutHares();
-    while (window.isOpen())
+    tiles[0][0]->PrintOutHares();
+
+    for (int i = 0; i < TILES_ROWS; i++)
+    {
+        for (int j = 0; j < TILES_COLUMS; j++)
+        {
+            tiles[i][j]->SetPosition((TILES_SIZE * i) + TILES_MARGIN, (TILES_SIZE * j) + TILES_MARGIN);
+        }
+    }
+
+
+    bool runSimulation = true;
+    while (runSimulation)
     {
         sf::Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed) window.close();
+            if (event.type == sf::Event::Closed) runSimulation = false; 
+        }
+        if (!runSimulation) continue;
+
+        window.clear();
+
+        for (int i = 0; i < TILES_ROWS; i++)
+        {
+            for (int j = 0; j < TILES_COLUMS; j++)
+            {
+                tiles[i][j]->DrawTile(&window);
+            }
         }
 
-        Draw(&window);
+        window.display();
     }
 
-    delete(t);
-    return 0;
-}
+    window.close();
+    for (int i=0; i<TILES_ROWS;i++) 
+    {
+        delete[] tiles[i];
+    }
 
-void Draw(sf::RenderWindow* window)
-{
-    window->clear();
-    window->draw(shape);
-    window->display();
+    delete[] tiles;
+    return 0;
 }
