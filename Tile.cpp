@@ -5,13 +5,22 @@ Tile::Tile()
 	food = 25;
 	rectangle = new sf::RectangleShape(sf::Vector2f(25.0f, 25.0f));
 	rectangle->setFillColor(sf::Color::Red);
+	displayedText = new sf::Text();
+	displayedText->setCharacterSize(25);
+	displayedText->setFillColor(sf::Color::Green);
 }
 
-Tile::Tile(int foodAmout, int tileSize)
+Tile::Tile(int foodAmout, sf::Font* font, int tileSize)
 {
 	food = foodAmout;
 	rectangle = new sf::RectangleShape(sf::Vector2f(tileSize, tileSize));
 	rectangle->setFillColor(sf::Color::Red);
+
+	displayedText = new sf::Text();
+	displayedText->setFont(*font);
+	displayedText->setCharacterSize(24);
+	displayedText->setFillColor(sf::Color::Green);
+	displayedText->setStyle(sf::Text::Bold | sf::Text::Underlined);
 }
 
 Tile::~Tile()
@@ -22,6 +31,7 @@ Tile::~Tile()
 		delete(h);
 	}
 	hares.clear();
+	delete(displayedText);
 	delete(rectangle);
 }
 
@@ -43,10 +53,13 @@ void Tile::PrintOutHares()
 void Tile::SetPosition(int x, int y)
 {
 	rectangle->setPosition(x, y);
-	std::cout <<this<<":"<<rectangle<<" - "<< x << " | " << y << std::endl;
+	displayedText->setPosition(x, y);
 }
 
 void Tile::DrawTile(sf::RenderWindow* window)
 {
+	int haresCount = hares.size();
+	displayedText->setString(std::to_string(haresCount));
 	window->draw(*rectangle);
+	window->draw(*displayedText);
 }

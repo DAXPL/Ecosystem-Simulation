@@ -13,6 +13,12 @@ const int TILES_MARGIN{ 10 };
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Simulation");
+    sf::Font* mainFont = new sf::Font();
+    if (!mainFont->loadFromFile("Bodoni.ttf"))
+    {
+        std::cerr << "Cant load font!" << std::endl;
+        return -1;
+    }
 
     //Generate terrain
     Tile* tiles[TILES_ROWS][TILES_COLUMS];
@@ -21,16 +27,16 @@ int main()
     {
         for (int j = 0; j < TILES_COLUMS; j++)
         {
-            tiles[i][j] = new Tile(75, TILES_SIZE);
+            tiles[i][j] = new Tile(75, mainFont, TILES_SIZE);
+            int howManyHares = rand() % 10;
+            for (int z = 0; z < howManyHares; z++)
+            {
+                tiles[i][j]->AddHare(new Hare());
+            }
+            
+            tiles[i][j]->PrintOutHares();
         }
     }
-
-    for (int i = 0; i < 10; i++) 
-    {
-        tiles[0][0]->AddHare(new Hare());
-    }
-    tiles[0][0]->PrintOutHares();
-    
 
     for (int i = 0; i < TILES_ROWS; i++)
     {

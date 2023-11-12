@@ -10,9 +10,10 @@ private:
 	int food{25};
 	std::vector<Hare*> hares;
 	sf::RectangleShape* rectangle;
+	sf::Text* displayedText;
 public:
 	Tile();
-	Tile(int foodAmout, int tileSize = 25);
+	Tile(int foodAmout, sf::Font* font, int tileSize = 25);
 	~Tile();
 	void AddHare(Hare* newHare);
 	void PrintOutHares();
