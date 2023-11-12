@@ -12,7 +12,7 @@ private:
 	sf::RectangleShape* rectangle;
 public:
 	Tile();
-	Tile(int foodAmout);
+	Tile(int foodAmout, int tileSize = 25);
 	~Tile();
 	void AddHare(Hare* newHare);
 	void PrintOutHares();

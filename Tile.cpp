@@ -3,14 +3,14 @@
 Tile::Tile()
 {
 	food = 25;
-	rectangle = new sf::RectangleShape(sf::Vector2f(50.0f, 50.0f));
+	rectangle = new sf::RectangleShape(sf::Vector2f(25.0f, 25.0f));
 	rectangle->setFillColor(sf::Color::Red);
 }
 
-Tile::Tile(int foodAmout)
+Tile::Tile(int foodAmout, int tileSize)
 {
 	food = foodAmout;
-	rectangle = new sf::RectangleShape(sf::Vector2f(50.0f, 50.0f));
+	rectangle = new sf::RectangleShape(sf::Vector2f(tileSize, tileSize));
 	rectangle->setFillColor(sf::Color::Red);
 }
 
@@ -43,7 +43,7 @@ void Tile::PrintOutHares()
 void Tile::SetPosition(int x, int y)
 {
 	rectangle->setPosition(x, y);
-	std::cout << x << " | " << y << std::endl;
+	std::cout <<this<<":"<<rectangle<<" - "<< x << " | " << y << std::endl;
 }
 
 void Tile::DrawTile(sf::RenderWindow* window)

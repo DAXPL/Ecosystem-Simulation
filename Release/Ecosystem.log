@@ -1,9 +1,9 @@
-﻿  Tile.cpp
-C:\Programowanie\SFML\Ecosystem-Simulation\Tile.cpp(45,28): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Programowanie\SFML\Ecosystem-Simulation\Tile.cpp(45,25): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+﻿  Ecosystem.cpp
+C:\Programowanie\SFML\Ecosystem-Simulation\Ecosystem.cpp(69,26): warning C4154: usunięcie wyrażenia tablicowego; dostarczono konwersji do wskaźnika
+C:\Programowanie\SFML\Ecosystem-Simulation\Ecosystem.cpp(72,19): warning C4154: usunięcie wyrażenia tablicowego; dostarczono konwersji do wskaźnika
   Trwa generowanie kodu
-  6 of 94 functions ( 6.4%) were compiled, the rest were copied from previous compilation.
+  1 of 94 functions ( 1.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+    0 functions had inline decision re-evaluated but remain unchanged
   Zakończono generowanie kodu
   Ecosystem.vcxproj -> C:\Programowanie\SFML\Ecosystem-Simulation\Release\Ecosystem.exe

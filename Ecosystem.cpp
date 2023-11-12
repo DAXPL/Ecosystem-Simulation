@@ -4,37 +4,43 @@
 #include "Hare.h"
 #include "Tile.h"
 
-const int TILES_ROWS{3};
-const int TILES_COLUMS{3};
-const int TILES_SIZE{ 10 };
-const int TILES_MARGIN{ 0 };
+const int TILES_ROWS{5};
+const int TILES_COLUMS{5};
+
+const int TILES_SIZE{ 50 };
+const int TILES_MARGIN{ 10 };
 
 int main()
 {
-    Tile* tiles[TILES_ROWS][TILES_COLUMS] =
-    {
-        {new Tile(75),new Tile(75),new Tile(75)},
-        {new Tile(75),new Tile(75),new Tile(75)},
-        {new Tile(75),new Tile(75),new Tile(75)}
-    };
-    
     sf::RenderWindow window(sf::VideoMode(800, 600), "Simulation");
+
+    //Generate terrain
+    Tile* tiles[TILES_ROWS][TILES_COLUMS];
+    
+    for (int i = 0; i < TILES_ROWS; i++)
+    {
+        for (int j = 0; j < TILES_COLUMS; j++)
+        {
+            tiles[i][j] = new Tile(75, TILES_SIZE);
+        }
+    }
 
     for (int i = 0; i < 10; i++) 
     {
         tiles[0][0]->AddHare(new Hare());
     }
     tiles[0][0]->PrintOutHares();
+    
 
     for (int i = 0; i < TILES_ROWS; i++)
     {
         for (int j = 0; j < TILES_COLUMS; j++)
         {
-            tiles[i][j]->SetPosition((TILES_SIZE * i) + TILES_MARGIN, (TILES_SIZE * j) + TILES_MARGIN);
+            tiles[i][j]->SetPosition(((TILES_SIZE+ TILES_MARGIN) * i), ((TILES_SIZE + TILES_MARGIN) * j));
         }
     }
 
-
+    //Simulation
     bool runSimulation = true;
     while (runSimulation)
     {
