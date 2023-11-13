@@ -19,5 +19,6 @@ public:
 	void PrintOutHares();
 	void SetPosition(int x, int y);
 	void DrawTile(sf::RenderWindow* window);
+	void SimulateTile();
 };
 

@@ -1,1 +1,2 @@
 C:\Programowanie\SFML\Ecosystem-Simulation\Release\Ecosystem.exe
+C:\Users\klimm\Documents\GitHub\Ecosystem-Simulation\Release\Ecosystem.exe

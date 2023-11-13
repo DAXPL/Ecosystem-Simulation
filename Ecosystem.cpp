@@ -33,8 +33,6 @@ int main()
             {
                 tiles[i][j]->AddHare(new Hare());
             }
-            
-            tiles[i][j]->PrintOutHares();
         }
     }
 
@@ -48,14 +46,32 @@ int main()
 
     //Simulation
     bool runSimulation = true;
+    int day{ 0 };
     while (runSimulation)
     {
         sf::Event event;
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed) runSimulation = false; 
+
+            if (event.type == sf::Event::KeyPressed)
+            {
+                if (event.key.code == sf::Keyboard::Space)
+                {
+                    std::cout << "Day:"<<std::to_string(day)<< std::endl;
+                    for (int i = 0; i < TILES_ROWS; i++)
+                    {
+                        for (int j = 0; j < TILES_COLUMS; j++)
+                        {
+                            tiles[i][j]->SimulateTile();
+                        }
+                    }
+                    day++;
+                    std::cout << std::endl;
+                }
+            }
         }
-        if (!runSimulation) continue;
+        if (!runSimulation) continue; 
 
         window.clear();
 
@@ -68,8 +84,9 @@ int main()
         }
 
         window.display();
+        std::cin;
     }
-
+    std::cout << "Ending simulation" << std::endl;
     window.close();
     for (int i=0; i<TILES_ROWS;i++) 
     {
@@ -77,5 +94,6 @@ int main()
     }
 
     delete[] tiles;
+    std::cout << "End" << std::endl;
     return 0;
 }

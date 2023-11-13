@@ -27,8 +27,7 @@ Tile::~Tile()
 {
 	for(int i= (hares.size() -1);i>=0;i--)
 	{
-		Hare* h = hares.at(i);
-		delete(h);
+		delete(hares.at(i));
 	}
 	hares.clear();
 	delete(displayedText);
@@ -45,7 +44,7 @@ void Tile::PrintOutHares()
 	std::cout << "Liczba zajecy w "<<this<<": "<< hares.size() << std::endl;
 	for (Hare* h : hares) 
 	{
-		std::cout << h << std::endl;
+		h->PrintOutHare();
 	}
 	std::cout << std::endl;
 }
@@ -62,4 +61,35 @@ void Tile::DrawTile(sf::RenderWindow* window)
 	displayedText->setString(std::to_string(haresCount));
 	window->draw(*rectangle);
 	window->draw(*displayedText);
+}
+
+void Tile::SimulateTile()
+{
+	std::vector<Hare*> haresAlive;
+	std::vector<Hare*> deadHares;
+	for (int i=0; i< hares.size();i++)
+	{
+		hares.at(i)->SimulateHare();
+		if (hares.at(i)->IsAlive()) 
+		{
+			haresAlive.push_back(hares.at(i));
+		}
+		else 
+		{
+			deadHares.push_back(hares.at(i));
+		}
+	}
+	hares.clear();
+
+	for (int i = 0; i < haresAlive.size(); i++)
+	{
+		hares.push_back(haresAlive.at(i));
+	}
+	haresAlive.clear();
+
+	for (int i = 0; i < deadHares.size(); i++)
+	{
+		delete deadHares.at(i);
+	}
+	deadHares.clear();
 }
