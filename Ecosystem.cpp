@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include "Hare.h"
 #include "Tile.h"
+#include "HarePanel.h"
 
 const int TILES_ROWS{5};
 const int TILES_COLUMS{5};
@@ -10,15 +11,45 @@ const int TILES_COLUMS{5};
 const int TILES_SIZE{ 50 };
 const int TILES_MARGIN{ 10 };
 
+static int haresId{0};
+
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Simulation");
+
     sf::Font* mainFont = new sf::Font();
     if (!mainFont->loadFromFile("Bodoni.ttf"))
     {
         std::cerr << "Cant load font!" << std::endl;
         return -1;
     }
+
+    sf::Texture bgTexture;
+    if (!bgTexture.loadFromFile("Background.jpg"))
+    {
+        std::cerr << "Cant load Background.jpg!" << std::endl;
+        return -1;
+    }
+
+    sf::Sprite bg(bgTexture);
+    float scaleX = (float)window.getSize().x / (float)bgTexture.getSize().x;
+    float scaleY = (float)window.getSize().y / (float)bgTexture.getSize().y;
+    bg.setScale(scaleX, scaleY);
+
+    sf::Text dayCounterText;
+    dayCounterText.setFont(*mainFont);
+    dayCounterText.setCharacterSize(40);
+    dayCounterText.setFillColor(sf::Color::White);
+    dayCounterText.setStyle(sf::Text::Bold);
+    dayCounterText.setPosition(460,5);
+    dayCounterText.setString("Simulation day: " + std::to_string(0));
+
+    HarePanel descPanels[3] =
+    {
+        HarePanel(450,75, mainFont),
+        HarePanel(450,200, mainFont),
+        HarePanel(450,325, mainFont)
+    };
 
     //Generate terrain
     Tile* tiles[TILES_ROWS][TILES_COLUMS];
@@ -47,6 +78,8 @@ int main()
     //Simulation
     bool runSimulation = true;
     int day{ 0 };
+    Tile* selectedTile{ nullptr };
+    int selectedOffset{ 0 };
     while (runSimulation)
     {
         sf::Event event;
@@ -61,7 +94,9 @@ int main()
                     switch (event.key.code) 
                     {
                         case sf::Keyboard::Space:
+                            day++;
                             std::cout << "Day:" << std::to_string(day) << std::endl;
+                            dayCounterText.setString("Simulation day:" + std::to_string(day));
                             for (int i = 0; i < TILES_ROWS; i++)
                             {
                                 for (int j = 0; j < TILES_COLUMS; j++)
@@ -69,8 +104,6 @@ int main()
                                     tiles[i][j]->SimulateTile();
                                 }
                             }
-                            day++;
-                            std::cout << std::endl;
                         break;
                     }
                     break;
@@ -87,7 +120,8 @@ int main()
                                 {
                                     if (tiles[i][j]->IsClicked(xPos, yPos)) 
                                     {
-                                        tiles[i][j]->PrintOutHares();
+                                        selectedTile = tiles[i][j];
+                                        selectedOffset = 0;
                                     }
                                 }
                             }
@@ -95,11 +129,17 @@ int main()
                         break;
                     }
                     break;
+                case sf::Event::MouseWheelMoved:
+                    selectedOffset += event.mouseWheel.delta;
+                    if (selectedOffset < 0) selectedOffset = 0;
+                    if (selectedOffset > selectedTile->GetHaresCount())selectedOffset = selectedTile->GetHaresCount();
+                    break;
             }
         }
         if (!runSimulation) continue; 
 
         window.clear();
+        window.draw(bg);
 
         for (int i = 0; i < TILES_ROWS; i++)
         {
@@ -109,8 +149,28 @@ int main()
             }
         }
 
+        if (selectedTile != nullptr) 
+        {
+            int hareCount = selectedTile->GetHaresCount();
+           
+            for (int i = 0; i < 3; i++)
+            {
+                int harePointer = selectedOffset + i;
+
+                if (harePointer < hareCount) 
+                {
+                    Hare* h = selectedTile->GetHare(harePointer);
+
+                    if (h != nullptr)
+                    {
+                        descPanels[i].DrawHareDesc(h, &window);
+                    }
+                }
+            }
+        }
+        
+        window.draw(dayCounterText);
         window.display();
-        std::cin;
     }
 
     std::cout << "Ending simulation" << std::endl;

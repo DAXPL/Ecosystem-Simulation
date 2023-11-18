@@ -21,5 +21,7 @@ public:
 	void DrawTile(sf::RenderWindow* window);
 	void SimulateTile();
 	bool IsClicked(int x, int y);
+	Hare* GetHare(int id);
+	int GetHaresCount();
 };
 

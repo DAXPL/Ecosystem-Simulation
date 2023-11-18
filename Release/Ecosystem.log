@@ -1,9 +1,1 @@
-﻿  Ecosystem.cpp
-C:\Programowanie\SFML\Ecosystem-Simulation\Ecosystem.cpp(120,26): warning C4154: usunięcie wyrażenia tablicowego; dostarczono konwersji do wskaźnika
-C:\Programowanie\SFML\Ecosystem-Simulation\Ecosystem.cpp(123,19): warning C4154: usunięcie wyrażenia tablicowego; dostarczono konwersji do wskaźnika
-  Trwa generowanie kodu
-  7 of 160 functions ( 4.4%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
-  Zakończono generowanie kodu
-  Ecosystem.vcxproj -> C:\Programowanie\SFML\Ecosystem-Simulation\Release\Ecosystem.exe
+﻿  Ecosystem.vcxproj -> C:\Programowanie\SFML\Ecosystem-Simulation\Release\Ecosystem.exe

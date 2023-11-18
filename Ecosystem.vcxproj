@@ -153,10 +153,12 @@
   <ItemGroup>
     <ClCompile Include="Ecosystem.cpp" />
     <ClCompile Include="Hare.cpp" />
+    <ClCompile Include="HarePanel.cpp" />
     <ClCompile Include="Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Hare.h" />
+    <ClInclude Include="HarePanel.h" />
     <ClInclude Include="Tile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

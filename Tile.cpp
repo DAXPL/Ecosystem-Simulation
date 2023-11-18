@@ -14,13 +14,13 @@ Tile::Tile(int foodAmout, sf::Font* font, int tileSize)
 {
 	food = foodAmout;
 	rectangle = new sf::RectangleShape(sf::Vector2f(tileSize, tileSize));
-	rectangle->setFillColor(sf::Color::Red);
+	rectangle->setFillColor(sf::Color::Cyan);
 
 	displayedText = new sf::Text();
 	displayedText->setFont(*font);
 	displayedText->setCharacterSize(24);
-	displayedText->setFillColor(sf::Color::Green);
-	displayedText->setStyle(sf::Text::Bold | sf::Text::Underlined);
+	displayedText->setFillColor(sf::Color::White);
+	displayedText->setStyle(sf::Text::Bold);
 }
 
 Tile::~Tile()
@@ -102,4 +102,19 @@ bool Tile::IsClicked(int x, int y)
 	int sizeY = rectangle->getGlobalBounds().getSize().y;
 
 	return (x >= recX && x <= (recX + sizeX)) && (y >= recY && y <= (recY + sizeY));
+}
+
+Hare* Tile::GetHare(int id)
+{
+	if (id < 0 || id >= hares.size()) 
+	{
+		//std::cerr << "id outside of boundaries!" << std::endl;
+		return nullptr;
+	}
+	return hares.at(id);
+}
+
+int Tile::GetHaresCount()
+{
+	return hares.size();
 }
