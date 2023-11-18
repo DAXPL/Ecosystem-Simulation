@@ -52,23 +52,49 @@ int main()
         sf::Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed) runSimulation = false; 
-
-            if (event.type == sf::Event::KeyPressed)
+            switch (event.type)
             {
-                if (event.key.code == sf::Keyboard::Space)
-                {
-                    std::cout << "Day:"<<std::to_string(day)<< std::endl;
-                    for (int i = 0; i < TILES_ROWS; i++)
+                case sf::Event::Closed:
+                    runSimulation = false;
+                    break;
+                case sf::Event::KeyPressed:
+                    switch (event.key.code) 
                     {
-                        for (int j = 0; j < TILES_COLUMS; j++)
-                        {
-                            tiles[i][j]->SimulateTile();
-                        }
+                        case sf::Keyboard::Space:
+                            std::cout << "Day:" << std::to_string(day) << std::endl;
+                            for (int i = 0; i < TILES_ROWS; i++)
+                            {
+                                for (int j = 0; j < TILES_COLUMS; j++)
+                                {
+                                    tiles[i][j]->SimulateTile();
+                                }
+                            }
+                            day++;
+                            std::cout << std::endl;
+                        break;
                     }
-                    day++;
-                    std::cout << std::endl;
-                }
+                    break;
+                case sf::Event::MouseButtonPressed:
+                    switch (event.key.code) 
+                    {
+                        case sf::Mouse::Left:
+                            int xPos = sf::Mouse::getPosition(window).x;
+                            int yPos = sf::Mouse::getPosition(window).y;
+
+                            for (int i = 0; i < TILES_ROWS; i++)
+                            {
+                                for (int j = 0; j < TILES_COLUMS; j++)
+                                {
+                                    if (tiles[i][j]->IsClicked(xPos, yPos)) 
+                                    {
+                                        tiles[i][j]->PrintOutHares();
+                                    }
+                                }
+                            }
+
+                        break;
+                    }
+                    break;
             }
         }
         if (!runSimulation) continue; 
@@ -86,6 +112,7 @@ int main()
         window.display();
         std::cin;
     }
+
     std::cout << "Ending simulation" << std::endl;
     window.close();
     for (int i=0; i<TILES_ROWS;i++) 

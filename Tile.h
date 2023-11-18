@@ -20,5 +20,6 @@ public:
 	void SetPosition(int x, int y);
 	void DrawTile(sf::RenderWindow* window);
 	void SimulateTile();
+	bool IsClicked(int x, int y);
 };
 

@@ -93,3 +93,13 @@ void Tile::SimulateTile()
 	}
 	deadHares.clear();
 }
+
+bool Tile::IsClicked(int x, int y)
+{
+	int recX = rectangle->getPosition().x;
+	int recY = rectangle->getPosition().y;
+	int sizeX = rectangle->getGlobalBounds().getSize().x;
+	int sizeY = rectangle->getGlobalBounds().getSize().y;
+
+	return (x >= recX && x <= (recX + sizeX)) && (y >= recY && y <= (recY + sizeY));
+}
