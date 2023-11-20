@@ -28,3 +28,17 @@ bool Hare::IsHareMale()
 {
 	return this->isMale;
 }
+
+int Hare::GetHareFurFenotype()
+{
+	return 0;
+}
+
+void Hare::HaveSex(Hare* partner)
+{
+	if (partner == nullptr || partner->IsHareMale() == this->IsHareMale() || partner==this)
+	{
+		std::cerr << "You cant mate with null partner, same gender hare or yourself" << std::endl;
+		return;
+	}
+}

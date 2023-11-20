@@ -19,6 +19,7 @@ int main()
 {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Simulation");
 
+    //GENERATE UI
     sf::Font* mainFont = new sf::Font();
     if (!mainFont->loadFromFile("Bodoni.ttf"))
     {

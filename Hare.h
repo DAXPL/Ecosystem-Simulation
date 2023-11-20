@@ -7,7 +7,10 @@ public:
 	void SimulateHare();
 	bool IsAlive();
 	bool IsHareMale();
+	int GetHareFurFenotype();
 	int hareID{0};
+
+	void HaveSex(Hare* partner);
 
 	//TESTY - POTEM HERMETYZOWAC
 	/*
@@ -18,8 +21,16 @@ public:
 	*/
 	int furGenotype[2] = { 0,0 };
 private:
-	int food {25};
+	int food {450};
+
+	//150-200
+	int foodUsage{ 150 };
 	bool isMale {true};
+
+	bool isPregnant{ false };
+	//28-35
+	int pregnacyTIme{ 31 };
+	int pregnacyTimeLeft{ 0 };
 	
 };
 
