@@ -8,6 +8,8 @@
 const int TILES_ROWS{5};
 const int TILES_COLUMS{5};
 
+const int HARE_PANELS{ 5 };
+
 const int TILES_SIZE{ 50 };
 const int TILES_MARGIN{ 10 };
 
@@ -44,12 +46,14 @@ int main()
     dayCounterText.setPosition(460,5);
     dayCounterText.setString("Simulation day: " + std::to_string(0));
 
-    HarePanel descPanels[3] =
+    int startY = 75;
+    int marginY = 5;
+    int panelHeight =  ((window.getSize().y-startY) / HARE_PANELS) - marginY;
+    HarePanel* descPanels[HARE_PANELS];
+    for (int i = 0; i < HARE_PANELS; i++)
     {
-        HarePanel(450,75, mainFont),
-        HarePanel(450,200, mainFont),
-        HarePanel(450,325, mainFont)
-    };
+        descPanels[i] = new HarePanel(450, (startY+((100+marginY)*i)),300, panelHeight, mainFont);
+    }
 
     //Generate terrain
     Tile* tiles[TILES_ROWS][TILES_COLUMS];
@@ -153,7 +157,7 @@ int main()
         {
             int hareCount = selectedTile->GetHaresCount();
            
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < HARE_PANELS; i++)
             {
                 int harePointer = selectedOffset + i;
 
@@ -163,7 +167,11 @@ int main()
 
                     if (h != nullptr)
                     {
-                        descPanels[i].DrawHareDesc(h, &window);
+                        descPanels[i]->DrawHareDesc(h, &window);
+                    }
+                    else 
+                    {
+                        break;
                     }
                 }
             }
@@ -175,12 +183,14 @@ int main()
 
     std::cout << "Ending simulation" << std::endl;
     window.close();
+
     for (int i=0; i<TILES_ROWS;i++) 
     {
         delete[] tiles[i];
     }
 
     delete[] tiles;
+    delete[] descPanels;
     std::cout << "End" << std::endl;
     return 0;
 }

@@ -1,1 +1,10 @@
-﻿  Ecosystem.vcxproj -> C:\Programowanie\SFML\Ecosystem-Simulation\Release\Ecosystem.exe
+﻿  Ecosystem.cpp
+C:\Users\klimm\Documents\GitHub\Ecosystem-Simulation\Ecosystem.cpp(190,26): warning C4154: deletion of an array expression; conversion to pointer supplied
+C:\Users\klimm\Documents\GitHub\Ecosystem-Simulation\Ecosystem.cpp(193,19): warning C4154: deletion of an array expression; conversion to pointer supplied
+C:\Users\klimm\Documents\GitHub\Ecosystem-Simulation\Ecosystem.cpp(194,24): warning C4154: deletion of an array expression; conversion to pointer supplied
+  Generating code
+  1 of 194 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  Ecosystem.vcxproj -> C:\Users\klimm\Documents\GitHub\Ecosystem-Simulation\Release\Ecosystem.exe

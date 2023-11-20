@@ -9,8 +9,10 @@ HarePanel::HarePanel()
 	displayedText = new sf::Text();
 }
 
-HarePanel::HarePanel(int x, int y, sf::Font* font)
+HarePanel::HarePanel(int x, int y, int panelWidth, int panelHeight, sf::Font* font)
 {
+	width = panelWidth;
+	height = panelHeight;
 	rectangle = new sf::RectangleShape(sf::Vector2f(width, height));
 	rectangle->setFillColor(sf::Color::Cyan);
 	rectangle->setPosition(x, y);

@@ -15,7 +15,7 @@ private:
 	int height{ 100 };
 public:
 	HarePanel();
-	HarePanel(int x, int y, sf::Font* font);
+	HarePanel(int x, int y, int panelWidth, int panelHeight, sf::Font* font);
 	void DrawHareDesc (Hare* hare, sf::RenderWindow* window);
 };
 
