@@ -7,9 +7,9 @@ public:
 	void SimulateHare();
 	bool IsAlive();
 	bool IsHareMale();
+	bool IsChild();
 	int GetHareFurFenotype();
 	int hareID{0};
-
 	void HaveSex(Hare* partner);
 
 	//TESTY - POTEM HERMETYZOWAC
@@ -20,14 +20,16 @@ public:
 	c = 0  allelu albinotyczny
 	*/
 	int furGenotype[2] = { 0,0 };
+	int age{ 0 };
+	int food{ 450 };
+	
 private:
-	int food {450};
-
+	
+	bool isPregnant{ false };
 	//150-200
 	int foodUsage{ 150 };
 	bool isMale {true};
-
-	bool isPregnant{ false };
+	
 	//28-35
 	int pregnacyTIme{ 31 };
 	int pregnacyTimeLeft{ 0 };

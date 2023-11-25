@@ -5,8 +5,9 @@ Hare::Hare()
 {
 	this->isMale = (rand() % 2)==0;
 	this->food = (rand() % 10) + 15;
-	this->furGenotype[0] = (rand() % 3);
-	this->furGenotype[1] = (rand() % 3);
+	this->furGenotype[0] = (rand() % 4);
+	this->furGenotype[1] = (rand() % 4);
+	this->age = (rand() % 20)+10;
 }
 
 void Hare::PrintOutHare()
@@ -17,11 +18,12 @@ void Hare::PrintOutHare()
 void Hare::SimulateHare()
 {
 	food--;
+	age++;
 }
 
 bool Hare::IsAlive()
 {
-	return food>0;
+	return food > 0 && age <= 1825; //5lat
 }
 
 bool Hare::IsHareMale()
@@ -29,9 +31,17 @@ bool Hare::IsHareMale()
 	return this->isMale;
 }
 
+bool Hare::IsChild()
+{
+	return age<30;
+}
+
 int Hare::GetHareFurFenotype()
 {
-	return 0;
+	if (furGenotype[0] == 3 || furGenotype[1] == 3) return 3; //allel "czarny"
+	if (furGenotype[0] == 2 || furGenotype[1] == 2) return 2; //allel "szynszylowy"
+	if (furGenotype[0] == 1 || furGenotype[1] == 1) return 1; //allel "himalajski"
+	return 0; //allel "albinotyczny"
 }
 
 void Hare::HaveSex(Hare* partner)

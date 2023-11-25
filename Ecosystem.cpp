@@ -13,8 +13,6 @@ const int HARE_PANELS{ 5 };
 const int TILES_SIZE{ 50 };
 const int TILES_MARGIN{ 10 };
 
-static int haresId{0};
-
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Simulation");
@@ -42,7 +40,7 @@ int main()
     sf::Text dayCounterText;
     dayCounterText.setFont(*mainFont);
     dayCounterText.setCharacterSize(40);
-    dayCounterText.setFillColor(sf::Color::White);
+    dayCounterText.setFillColor(sf::Color(161, 254, 161));
     dayCounterText.setStyle(sf::Text::Bold);
     dayCounterText.setPosition(460,5);
     dayCounterText.setString("Simulation day: " + std::to_string(0));
@@ -51,9 +49,18 @@ int main()
     int marginY = 5;
     int panelHeight =  ((window.getSize().y-startY) / HARE_PANELS) - marginY;
     HarePanel* descPanels[HARE_PANELS];
+    sf::Texture haresTexes[2][4] = {
+        {sf::Texture(),sf::Texture(),sf::Texture(),sf::Texture()},
+        {sf::Texture(),sf::Texture(),sf::Texture(),sf::Texture()}
+    };
+    for (int i = 0; i < 4; i++)
+    {
+        haresTexes[0][i].loadFromFile("Kicajec" + std::to_string(i) + ".png");
+        haresTexes[1][i].loadFromFile("BabyKicajec" + std::to_string(i) + ".png");
+    }
     for (int i = 0; i < HARE_PANELS; i++)
     {
-        descPanels[i] = new HarePanel(450, (startY+((100+marginY)*i)),300, panelHeight, mainFont);
+        descPanels[i] = new HarePanel(450, (startY+((100+marginY)*i)),300, panelHeight, mainFont, *haresTexes);
     }
 
     //Generate terrain
