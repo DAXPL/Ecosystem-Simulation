@@ -2,7 +2,7 @@
 //prze³adowaæ konstruktor
 Tile::Tile()
 {
-	food = 25;
+	food = 2000;
 	rectangle = new sf::RectangleShape(sf::Vector2f(25.0f, 25.0f));
 	rectangle->setFillColor(sf::Color::Red);
 	displayedText = new sf::Text();
@@ -13,6 +13,7 @@ Tile::Tile()
 Tile::Tile(int foodAmout, sf::Font* font, int tileSize)
 {
 	food = foodAmout;
+	foodRegen = foodAmout / 4;
 	rectangle = new sf::RectangleShape(sf::Vector2f(tileSize, tileSize));
 	rectangle->setFillColor(sf::Color::Cyan);
 
@@ -58,7 +59,7 @@ void Tile::SetPosition(int x, int y)
 void Tile::DrawTile(sf::RenderWindow* window)
 {
 	int haresCount = hares.size();
-	displayedText->setString(std::to_string(haresCount));
+	displayedText->setString(std::to_string(haresCount)+'\n'+std::to_string(food));
 	window->draw(*rectangle);
 	window->draw(*displayedText);
 }
@@ -67,9 +68,11 @@ void Tile::SimulateTile()
 {
 	std::vector<Hare*> haresAlive;
 	std::vector<Hare*> deadHares;
+
 	for (int i=0; i< hares.size();i++)
 	{
-		hares.at(i)->SimulateHare();
+		hares.at(i)->SimulateHare(&food,(food/ hares.size())*1.1f);
+
 		if (hares.at(i)->IsAlive()) 
 		{
 			haresAlive.push_back(hares.at(i));
@@ -92,6 +95,8 @@ void Tile::SimulateTile()
 		delete deadHares.at(i);
 	}
 	deadHares.clear();
+
+	if(food<maxFood) food += foodRegen;
 }
 
 bool Tile::IsClicked(int x, int y)

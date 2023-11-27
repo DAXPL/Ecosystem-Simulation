@@ -44,7 +44,7 @@ void HarePanel::DrawHareDesc(Hare* hare, sf::RenderWindow* window)
 	hareSprite->setTexture(*(haresTex + (hare->IsChild() * 4) + hare->GetHareFurFenotype()));
 	//std::string 
 	displayedText->setString(
-		  "Genotyp: "+std::to_string(hare->furGenotype[0])+" - " + std::to_string(hare->furGenotype[1]) + '\n' 
+		  "Fenotyp: " + hare->GetHareFurFenotypeName() + '\n'
 		+ "Wiek (dni):" + std::to_string(hare->age) + '\n'
 		+ "Plec:" + std::to_string(hare->IsHareMale()) + '\n'
 		+ "Kalorie:" + std::to_string(hare->food) + '\n');

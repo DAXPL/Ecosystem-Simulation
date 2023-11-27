@@ -1,14 +1,16 @@
 #pragma once
+#include <string>
 class Hare
 {
 public:
 	Hare();
 	void PrintOutHare();
-	void SimulateHare();
+	void SimulateHare(int* food, int maxFood);
 	bool IsAlive();
 	bool IsHareMale();
 	bool IsChild();
 	int GetHareFurFenotype();
+	std::string GetHareFurFenotypeName();
 	int hareID{0};
 	void HaveSex(Hare* partner);
 
@@ -28,6 +30,8 @@ private:
 	bool isPregnant{ false };
 	//150-200
 	int foodUsage{ 150 };
+	int maxFoodPerDay{ 300 };
+	int maxFatSize{ 1500 };
 	bool isMale {true};
 	
 	//28-35

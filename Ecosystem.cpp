@@ -70,7 +70,7 @@ int main()
     {
         for (int j = 0; j < TILES_COLUMS; j++)
         {
-            tiles[i][j] = new Tile(75, mainFont, TILES_SIZE);
+            tiles[i][j] = new Tile((rand() % 1500)+1000, mainFont, TILES_SIZE);
             int howManyHares = rand() % 10;
             for (int z = 0; z < howManyHares; z++)
             {
@@ -143,8 +143,9 @@ int main()
                     break;
                 case sf::Event::MouseWheelMoved:
                     selectedOffset += event.mouseWheel.delta;
+                    int maxOffset = selectedTile->GetHaresCount() - HARE_PANELS;
                     if (selectedOffset < 0) selectedOffset = 0;
-                    if (selectedOffset > selectedTile->GetHaresCount())selectedOffset = selectedTile->GetHaresCount();
+                    if (selectedOffset > maxOffset)selectedOffset = maxOffset;
                     break;
             }
         }
@@ -191,14 +192,7 @@ int main()
 
     std::cout << "Ending simulation" << std::endl;
     window.close();
-
-    for (int i=0; i<TILES_ROWS;i++) 
-    {
-        delete[] tiles[i];
-    }
-
-    delete[] tiles;
-    delete[] descPanels;
+    //wyczyscic pamiec
     std::cout << "End" << std::endl;
     return 0;
 }

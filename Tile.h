@@ -7,7 +7,9 @@
 class Tile
 {
 private:
-	int food{25};
+	int food{2000};
+	int foodRegen{750};
+	int maxFood{ 4000 };
 	std::vector<Hare*> hares;
 	sf::RectangleShape* rectangle;
 	sf::Text* displayedText;
