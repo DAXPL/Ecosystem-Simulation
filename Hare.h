@@ -12,6 +12,7 @@ public:
 	int GetHareFurFenotype();
 	std::string GetHareFurFenotypeName();
 	int hareID{0};
+	int GetMoveVector();
 	void HaveSex(Hare* partner);
 
 	//TESTY - POTEM HERMETYZOWAC
@@ -24,7 +25,6 @@ public:
 	int furGenotype[2] = { 0,0 };
 	int age{ 0 };
 	int food{ 450 };
-	
 private:
 	
 	bool isPregnant{ false };
@@ -37,6 +37,8 @@ private:
 	//28-35
 	int pregnacyTIme{ 31 };
 	int pregnacyTimeLeft{ 0 };
+
+	bool alreadyMoveThisDay{ false };
 	
 };
 

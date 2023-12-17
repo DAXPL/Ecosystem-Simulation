@@ -31,11 +31,13 @@ void Hare::SimulateHare(int* tileFood, int maxFood)
 	food += caloriesToEat;
 	
 	age++;
+	alreadyMoveThisDay = false;
 }
 
 bool Hare::IsAlive()
 {
-	return food > 0 && age <= 1825; //5lat
+	//return food > 0 && age <= 1825; //5lat
+	return true;//to debug movement
 }
 
 bool Hare::IsHareMale()
@@ -62,6 +64,15 @@ std::string Hare::GetHareFurFenotypeName()
 	if (furGenotype[0] == 2 || furGenotype[1] == 2) return std::string("Szynszylowaty"); //allel "szynszylowy"
 	if (furGenotype[0] == 1 || furGenotype[1] == 1) return std::string("Himalajski"); //allel "himalajski"
 	return std::string("Albinotyczny"); //allel "albinotyczny"
+}
+//0-stay, 1-left, 2-up, 3-right, 4-down
+int Hare::GetMoveVector()
+{
+	int vec = 2;
+	if (alreadyMoveThisDay) vec = 0;
+	alreadyMoveThisDay = true;
+
+	return vec;
 }
 
 void Hare::HaveSex(Hare* partner)

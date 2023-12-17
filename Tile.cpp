@@ -10,7 +10,7 @@ Tile::Tile()
 	displayedText->setFillColor(sf::Color::Green);
 }
 
-Tile::Tile(int foodAmout, sf::Font* font, int tileSize)
+Tile::Tile(int foodAmout, sf::Font* font, Tile* left, Tile* up, Tile* right, Tile* down, int tileSize)
 {
 	food = foodAmout;
 	foodRegen = foodAmout / 4;
@@ -22,6 +22,11 @@ Tile::Tile(int foodAmout, sf::Font* font, int tileSize)
 	displayedText->setCharacterSize(24);
 	displayedText->setFillColor(sf::Color::White);
 	displayedText->setStyle(sf::Text::Bold);
+
+	neighbors[0] = left;
+	neighbors[1] = up;
+	neighbors[2] = right;
+	neighbors[3] = down;
 }
 
 Tile::~Tile()
@@ -97,6 +102,73 @@ void Tile::SimulateTile()
 	deadHares.clear();
 
 	if(food<maxFood) food += foodRegen;
+}
+
+void Tile::SimulateMove()
+{
+	std::vector<Hare*> haresStay;
+
+	for (int i = 0; i < hares.size(); i++)
+	{
+		int moveVector = hares.at(i)->GetMoveVector();
+		switch (moveVector) 
+		{
+			case 0:
+				haresStay.push_back(hares.at(i));
+				break;
+			case 1:
+				if (neighbors[0] != nullptr) 
+				{
+					neighbors[0]->AddHare(hares.at(i));
+				} 
+				else 
+				{
+					std::cerr << "no neighbor at left!" << std::endl;
+					haresStay.push_back(hares.at(i));
+				} 
+				break;
+			case 2:
+				if (neighbors[1] != nullptr)
+				{
+					neighbors[1]->AddHare(hares.at(i));
+				}
+				else
+				{
+					std::cerr << "no neighbor up!" << std::endl;
+					haresStay.push_back(hares.at(i));
+				}
+				break;
+			case 3:
+				if (neighbors[2] != nullptr)
+				{
+					neighbors[2]->AddHare(hares.at(i));
+				}
+				else
+				{
+					std::cerr << "no neighbor at right!" << std::endl;
+					haresStay.push_back(hares.at(i));
+				} 
+				break;
+			case 4:
+				if (neighbors[3] != nullptr)
+				{
+					neighbors[3]->AddHare(hares.at(i));
+				}
+				else
+				{
+					std::cerr << "no neighbor down!" << std::endl;
+					haresStay.push_back(hares.at(i));
+				} 
+				break;
+		}
+	}
+	hares.clear();
+
+	for (int i = 0; i < haresStay.size(); i++)
+	{
+		hares.push_back(haresStay.at(i));
+	}
+	haresStay.clear();
 }
 
 bool Tile::IsClicked(int x, int y)
