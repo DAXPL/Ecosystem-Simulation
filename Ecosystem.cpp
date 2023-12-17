@@ -142,10 +142,15 @@ int main()
                     }
                     break;
                 case sf::Event::MouseWheelMoved:
-                    selectedOffset += event.mouseWheel.delta;
-                    int maxOffset = selectedTile->GetHaresCount() - HARE_PANELS;
-                    if (selectedOffset < 0) selectedOffset = 0;
-                    if (selectedOffset > maxOffset)selectedOffset = maxOffset;
+                    if (selectedTile != nullptr) 
+                    {
+                        selectedOffset += event.mouseWheel.delta;
+                        int maxOffset = selectedTile->GetHaresCount() - HARE_PANELS;
+                        if (maxOffset < 0) maxOffset = 0;
+                        if (selectedOffset < 0) selectedOffset = 0;
+                        if (selectedOffset > maxOffset)selectedOffset = maxOffset;
+                        std::cout << selectedOffset << " " << maxOffset << std::endl;
+                    }
                     break;
             }
         }

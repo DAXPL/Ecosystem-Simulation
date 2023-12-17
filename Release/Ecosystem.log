@@ -1,33 +1,7 @@
-﻿  HarePanel.cpp
-C:\Users\klimm\Documents\GitHub\Ecosystem-Simulation\HarePanel.cpp(5,57): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\klimm\Documents\GitHub\Ecosystem-Simulation\HarePanel.cpp(5,50): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\klimm\Documents\GitHub\Ecosystem-Simulation\HarePanel.cpp(19,57): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\klimm\Documents\GitHub\Ecosystem-Simulation\HarePanel.cpp(19,50): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\klimm\Documents\GitHub\Ecosystem-Simulation\HarePanel.cpp(21,28): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\klimm\Documents\GitHub\Ecosystem-Simulation\HarePanel.cpp(21,25): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\klimm\Documents\GitHub\Ecosystem-Simulation\HarePanel.cpp(28,36): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\klimm\Documents\GitHub\Ecosystem-Simulation\HarePanel.cpp(28,30): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\klimm\Documents\GitHub\Ecosystem-Simulation\HarePanel.cpp(33,29): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\klimm\Documents\GitHub\Ecosystem-Simulation\HarePanel.cpp(33,26): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  Generating code
-  2 of 204 functions ( 1.0%) were compiled, the rest were copied from previous compilation.
+﻿  Ecosystem.cpp
+  Trwa generowanie kodu
+  1 of 204 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
-  Finished generating code
-  Ecosystem.vcxproj -> C:\Users\klimm\Documents\GitHub\Ecosystem-Simulation\Release\Ecosystem.exe
+    0 functions had inline decision re-evaluated but remain unchanged
+  Zakończono generowanie kodu
+  Ecosystem.vcxproj -> C:\Programowanie\SFML\Ecosystem-Simulation\Release\Ecosystem.exe
