@@ -68,15 +68,8 @@ int main()
     for (int i = 0; i < TILES_SIZE; i++)
     {
         for (int j = 0; j < TILES_SIZE; j++)
-        {//(i<=0)?(tiles[TILES_ROWS-1]):(tiles[i-1])
-            tiles[i][j] = new Tile(
-                (rand() % 1500)+1000, 
-                mainFont, tiles[0][0], tiles[0][0], tiles[0][0], tiles[0][0],
-                //tiles[(i<=0)?(TILES_SIZE -1):(i-1)][j],//left
-                //tiles[i][(j<=0)?(TILES_SIZE-1):(j+1)],//up
-                //tiles[(i >= (TILES_SIZE -1)) ? (0) : (i + 1)][j],//right
-                //tiles[i][(j>= TILES_SIZE - 1)?(0):(j-1)],//down
-                TILES_GFX_SIZE);
+        {
+            tiles[i][j] = new Tile((rand() % 1500)+1000,mainFont,TILES_GFX_SIZE);
             int howManyHares = rand() % 10;
             for (int z = 0; z < howManyHares; z++)
             {
@@ -90,6 +83,12 @@ int main()
         for (int j = 0; j < TILES_SIZE; j++)
         {
             tiles[i][j]->SetPosition(((TILES_GFX_SIZE + TILES_MARGIN) * i), ((TILES_GFX_SIZE + TILES_MARGIN) * j));
+            tiles[i][j]->SetTileNeighbors(
+                tiles[(i<=0)?(TILES_SIZE -1):(i-1)]             [j],//left
+                tiles[i]                                        [(j<=0)?(TILES_SIZE-1):(j+1)],//up
+                tiles[(i >= (TILES_SIZE -1)) ? (0) : (i + 1)]   [j],//right
+                tiles[i]                                        [(j>=TILES_SIZE-1)?(0):(j-1)]//down
+                );
         }
     }
 

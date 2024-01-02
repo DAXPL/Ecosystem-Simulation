@@ -36,8 +36,8 @@ void Hare::SimulateHare(int* tileFood, int maxFood)
 
 bool Hare::IsAlive()
 {
-	//return food > 0 && age <= 1825; //5lat
-	return true;//to debug movement
+	return food > 0 && age <= 1825; //5lat
+	//return true;//to debug movement
 }
 
 bool Hare::IsHareMale()
@@ -68,7 +68,7 @@ std::string Hare::GetHareFurFenotypeName()
 //0-stay, 1-left, 2-up, 3-right, 4-down
 int Hare::GetMoveVector()
 {
-	int vec = 2;
+	int vec = rand() % 4;
 	if (alreadyMoveThisDay) vec = 0;
 	alreadyMoveThisDay = true;
 
@@ -77,9 +77,9 @@ int Hare::GetMoveVector()
 
 void Hare::HaveSex(Hare* partner)
 {
-	if (partner == nullptr || partner->IsHareMale() == this->IsHareMale() || partner==this)
+	if (partner == nullptr || partner->IsChild() == true || partner->IsHareMale() == this->IsHareMale() || partner == this)
 	{
-		std::cerr << "You cant mate with null partner, same gender hare or yourself" << std::endl;
+		std::cerr << "You cant mate with null partner, kid, same gender hare or yourself" << std::endl;
 		return;
 	}
 }

@@ -10,7 +10,7 @@ Tile::Tile()
 	displayedText->setFillColor(sf::Color::Green);
 }
 
-Tile::Tile(int foodAmout, sf::Font* font, Tile* left, Tile* up, Tile* right, Tile* down, int tileSize)
+Tile::Tile(int foodAmout, sf::Font* font, int tileSize)
 {
 	food = foodAmout;
 	foodRegen = foodAmout / 4;
@@ -23,10 +23,12 @@ Tile::Tile(int foodAmout, sf::Font* font, Tile* left, Tile* up, Tile* right, Til
 	displayedText->setFillColor(sf::Color::White);
 	displayedText->setStyle(sf::Text::Bold);
 
-	neighbors[0] = left;
-	neighbors[1] = up;
-	neighbors[2] = right;
-	neighbors[3] = down;
+	std::cout << "tiles" << std::endl;
+	std::cout << neighbors[0] << std::endl;
+	std::cout << neighbors[1] << std::endl;
+	std::cout << neighbors[2] << std::endl;
+	std::cout << neighbors[3] << std::endl;
+	std::cout << std::endl;
 }
 
 Tile::~Tile()
@@ -38,6 +40,14 @@ Tile::~Tile()
 	hares.clear();
 	delete(displayedText);
 	delete(rectangle);
+}
+
+void Tile::SetTileNeighbors(Tile* left, Tile* up, Tile* right, Tile* down)
+{
+	neighbors[0] = left;
+	neighbors[1] = up;
+	neighbors[2] = right;
+	neighbors[3] = down;
 }
 
 void Tile::AddHare(Hare* newHare)
@@ -71,37 +81,32 @@ void Tile::DrawTile(sf::RenderWindow* window)
 
 void Tile::SimulateTile()
 {
-	std::vector<Hare*> haresAlive;
-	std::vector<Hare*> deadHares;
 
-	for (int i=0; i< hares.size();i++)
+	for (int i = 0; i < hares.size(); i++)
 	{
-		hares.at(i)->SimulateHare(&food,(food/ hares.size())*1.1f);
-
-		if (hares.at(i)->IsAlive()) 
+		if (hares.at(i) == nullptr)
 		{
-			haresAlive.push_back(hares.at(i));
+			std::cerr << "NULL HARE!" << std::endl;
+			continue;
 		}
-		else 
+
+		hares.at(i)->SimulateHare(&food, (food / hares.size()) * 1.1f);
+
+	}
+
+	// Usuwanie martwych zaj¹czków
+	for (int i = 0; i < hares.size(); i++)
+	{
+		if (!hares.at(i)->IsAlive())
 		{
-			deadHares.push_back(hares.at(i));
+			delete hares.at(i);
 		}
 	}
-	hares.clear();
 
-	for (int i = 0; i < haresAlive.size(); i++)
-	{
-		hares.push_back(haresAlive.at(i));
-	}
-	haresAlive.clear();
+	// Wyczyszczenie listy zdech³ych zaj¹czków
+	hares.erase(std::remove_if(hares.begin(), hares.end(), [](Hare* hare) { return !hare->IsAlive(); }), hares.end());
 
-	for (int i = 0; i < deadHares.size(); i++)
-	{
-		delete deadHares.at(i);
-	}
-	deadHares.clear();
-
-	if(food<maxFood) food += foodRegen;
+	if (food < maxFood) food += foodRegen;
 }
 
 void Tile::SimulateMove()
@@ -111,65 +116,35 @@ void Tile::SimulateMove()
 	for (int i = 0; i < hares.size(); i++)
 	{
 		int moveVector = hares.at(i)->GetMoveVector();
-		switch (moveVector) 
+		switch (moveVector)
 		{
-			case 0:
+		case 1: case 2: case 3: case 4:
+			if (neighbors[moveVector - 1] != nullptr && hares.at(i) != nullptr)
+			{
+				std::cerr << moveVector << std::endl;
+				neighbors[moveVector - 1]->AddHare(hares.at(i));
+			}
+			else
+			{
+				std::cerr << "no neighbor" << std::endl;
 				haresStay.push_back(hares.at(i));
-				break;
-			case 1:
-				if (neighbors[0] != nullptr) 
-				{
-					neighbors[0]->AddHare(hares.at(i));
-				} 
-				else 
-				{
-					std::cerr << "no neighbor at left!" << std::endl;
-					haresStay.push_back(hares.at(i));
-				} 
-				break;
-			case 2:
-				if (neighbors[1] != nullptr)
-				{
-					neighbors[1]->AddHare(hares.at(i));
-				}
-				else
-				{
-					std::cerr << "no neighbor up!" << std::endl;
-					haresStay.push_back(hares.at(i));
-				}
-				break;
-			case 3:
-				if (neighbors[2] != nullptr)
-				{
-					neighbors[2]->AddHare(hares.at(i));
-				}
-				else
-				{
-					std::cerr << "no neighbor at right!" << std::endl;
-					haresStay.push_back(hares.at(i));
-				} 
-				break;
-			case 4:
-				if (neighbors[3] != nullptr)
-				{
-					neighbors[3]->AddHare(hares.at(i));
-				}
-				else
-				{
-					std::cerr << "no neighbor down!" << std::endl;
-					haresStay.push_back(hares.at(i));
-				} 
-				break;
+			}
+			break;
+		default:
+			haresStay.push_back(hares.at(i));
+			break;
 		}
 	}
-	hares.clear();
 
-	for (int i = 0; i < haresStay.size(); i++)
-	{
-		hares.push_back(haresStay.at(i));
-	}
+	// Usuñ zaj¹ce, które siê przenios³y
+	hares.erase(std::remove_if(hares.begin(), hares.end(), [&haresStay](Hare* hare) {
+		return std::find(haresStay.begin(), haresStay.end(), hare) != haresStay.end();
+		}), hares.end());
+
+	// Wyczyszczenie tymczasowej listy zywej
 	haresStay.clear();
 }
+
 
 bool Tile::IsClicked(int x, int y)
 {

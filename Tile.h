@@ -18,8 +18,9 @@ private:
 	sf::Text* displayedText;
 public:
 	Tile();
-	Tile(int foodAmout, sf::Font* font, Tile* left, Tile* up, Tile* right, Tile* down, int tileSize = 25);
+	Tile(int foodAmout, sf::Font* font, int tileSize = 25);
 	~Tile();
+	void SetTileNeighbors( Tile* left, Tile* up, Tile* right, Tile* down);
 	void AddHare(Hare* newHare);
 	void PrintOutHares();
 	void SetPosition(int x, int y);
