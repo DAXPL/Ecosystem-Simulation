@@ -5,12 +5,11 @@
 #include "Tile.h"
 #include "HarePanel.h"
 
-const int TILES_ROWS{5};
-const int TILES_COLUMS{5};
+const int TILES_SIZE{2};
 
 const int HARE_PANELS{ 5 };
 
-const int TILES_SIZE{ 50 };
+const int TILES_GFX_SIZE{ 50 };
 const int TILES_MARGIN{ 10 };
 
 int main()
@@ -64,13 +63,13 @@ int main()
     }
 
     //Generate terrain
-    Tile* tiles[TILES_ROWS][TILES_COLUMS];
+    Tile* tiles[TILES_SIZE][TILES_SIZE];
     
-    for (int i = 0; i < TILES_ROWS; i++)
+    for (int i = 0; i < TILES_SIZE; i++)
     {
-        for (int j = 0; j < TILES_COLUMS; j++)
+        for (int j = 0; j < TILES_SIZE; j++)
         {
-            tiles[i][j] = new Tile((rand() % 1500)+1000, mainFont, TILES_SIZE);
+            tiles[i][j] = new Tile((rand() % 1500)+1000,mainFont,TILES_GFX_SIZE);
             int howManyHares = rand() % 10;
             for (int z = 0; z < howManyHares; z++)
             {
@@ -79,11 +78,19 @@ int main()
         }
     }
 
-    for (int i = 0; i < TILES_ROWS; i++)
+    for (int i = 0; i < TILES_SIZE; i++)
     {
-        for (int j = 0; j < TILES_COLUMS; j++)
+        for (int j = 0; j < TILES_SIZE; j++)
         {
-            tiles[i][j]->SetPosition(((TILES_SIZE+ TILES_MARGIN) * i), ((TILES_SIZE + TILES_MARGIN) * j));
+            tiles[i][j]->SetPosition(((TILES_GFX_SIZE + TILES_MARGIN) * i), ((TILES_GFX_SIZE + TILES_MARGIN) * j));
+            tiles[i][j]->SetTileNeighbors(
+                tiles[(i == 0) ? (TILES_SIZE - 1) : (i - 1)][j],   // left
+                tiles[i][(j == 0) ? (TILES_SIZE - 1) : (j - 1)],   // up
+                tiles[(i == (TILES_SIZE - 1)) ? (0) : (i + 1)][j], // right
+                tiles[i][(j == (TILES_SIZE - 1)) ? (0) : (j + 1)]  // down
+            );
+
+            std::cout << "Tile ["+ std::to_string(i) +"][" + std::to_string(j) + "] <" + std::to_string((int)(tiles[i][j])) + ">" << std::endl;
         }
     }
 
@@ -109,13 +116,23 @@ int main()
                             day++;
                             std::cout << "Day:" << std::to_string(day) << std::endl;
                             dayCounterText.setString("Simulation day:" + std::to_string(day));
-                            for (int i = 0; i < TILES_ROWS; i++)
+
+                            for (int i = 0; i < TILES_SIZE; i++)
                             {
-                                for (int j = 0; j < TILES_COLUMS; j++)
+                                for (int j = 0; j < TILES_SIZE; j++)
                                 {
                                     tiles[i][j]->SimulateTile();
                                 }
                             }
+
+                            for (int i = 0; i < TILES_SIZE; i++)
+                            {
+                                for (int j = 0; j < TILES_SIZE; j++)
+                                {
+                                    tiles[i][j]->SimulateMove();
+                                }
+                            }
+
                         break;
                     }
                     break;
@@ -126,9 +143,9 @@ int main()
                             int xPos = sf::Mouse::getPosition(window).x;
                             int yPos = sf::Mouse::getPosition(window).y;
 
-                            for (int i = 0; i < TILES_ROWS; i++)
+                            for (int i = 0; i < TILES_SIZE; i++)
                             {
-                                for (int j = 0; j < TILES_COLUMS; j++)
+                                for (int j = 0; j < TILES_SIZE; j++)
                                 {
                                     if (tiles[i][j]->IsClicked(xPos, yPos)) 
                                     {
@@ -149,7 +166,6 @@ int main()
                         if (maxOffset < 0) maxOffset = 0;
                         if (selectedOffset < 0) selectedOffset = 0;
                         if (selectedOffset > maxOffset)selectedOffset = maxOffset;
-                        std::cout << selectedOffset << " " << maxOffset << std::endl;
                     }
                     break;
             }
@@ -159,9 +175,9 @@ int main()
         window.clear();
         window.draw(bg);
 
-        for (int i = 0; i < TILES_ROWS; i++)
+        for (int i = 0; i < TILES_SIZE; i++)
         {
-            for (int j = 0; j < TILES_COLUMS; j++)
+            for (int j = 0; j < TILES_SIZE; j++)
             {
                 tiles[i][j]->DrawTile(&window);
             }

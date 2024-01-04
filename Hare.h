@@ -4,15 +4,20 @@ class Hare
 {
 public:
 	Hare();
+	Hare(int genA, int genB);
 	void PrintOutHare();
 	void SimulateHare(int* food, int maxFood);
 	bool IsAlive();
 	bool IsHareMale();
 	bool IsChild();
+	bool IsReadyToProcreate();
 	int GetHareFurFenotype();
 	std::string GetHareFurFenotypeName();
 	int hareID{0};
+	int GetMoveVector();
 	void HaveSex(Hare* partner);
+
+	int ManagePregnacy();
 
 	//TESTY - POTEM HERMETYZOWAC
 	/*
@@ -22,9 +27,10 @@ public:
 	c = 0  allelu albinotyczny
 	*/
 	int furGenotype[2] = { 0,0 };
+	//kids father Data
+	int fatherfurGenotype[2] = { 0,0 };
 	int age{ 0 };
 	int food{ 450 };
-	
 private:
 	
 	bool isPregnant{ false };
@@ -35,8 +41,11 @@ private:
 	bool isMale {true};
 	
 	//28-35
-	int pregnacyTIme{ 31 };
+	int pregnacyTime{ 31 };
 	int pregnacyTimeLeft{ 0 };
-	
+
+	bool alreadyMoveThisDay{ false };
+
+	int daySinceLastMate = 0;	
 };
 

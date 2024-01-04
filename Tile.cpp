@@ -35,9 +35,17 @@ Tile::~Tile()
 	delete(rectangle);
 }
 
+void Tile::SetTileNeighbors(Tile* left, Tile* up, Tile* right, Tile* down)
+{
+	neighbors[0] = left;
+	neighbors[1] = up;
+	neighbors[2] = right;
+	neighbors[3] = down;
+}
+
 void Tile::AddHare(Hare* newHare)
 {
-	hares.push_back(newHare);
+	if(newHare != nullptr) hares.push_back(newHare);
 }
 
 void Tile::PrintOutHares()
@@ -45,7 +53,7 @@ void Tile::PrintOutHares()
 	std::cout << "Liczba zajecy w "<<this<<": "<< hares.size() << std::endl;
 	for (Hare* h : hares) 
 	{
-		h->PrintOutHare();
+		if (h != nullptr)h->PrintOutHare();
 	}
 	std::cout << std::endl;
 }
@@ -58,64 +66,116 @@ void Tile::SetPosition(int x, int y)
 
 void Tile::DrawTile(sf::RenderWindow* window)
 {
-	int haresCount = hares.size();
-	displayedText->setString(std::to_string(haresCount)+'\n'+std::to_string(food));
+	displayedText->setString(std::to_string(hares.size())+'\n'+std::to_string(food));
 	window->draw(*rectangle);
 	window->draw(*displayedText);
 }
 
 void Tile::SimulateTile()
 {
-	std::vector<Hare*> haresAlive;
-	std::vector<Hare*> deadHares;
+	std::vector<Hare*> maleHaresToProcreate;
+	std::vector<Hare*> femaleHaresToProcreate;
 
-	for (int i=0; i< hares.size();i++)
+	for (int i = 0; i < hares.size(); i++)
 	{
-		hares.at(i)->SimulateHare(&food,(food/ hares.size())*1.1f);
-
-		if (hares.at(i)->IsAlive()) 
+		if (hares.at(i) == nullptr)
 		{
-			haresAlive.push_back(hares.at(i));
+			std::cerr << "NULL HARE!" << std::endl;
+			continue;
 		}
-		else 
+
+		hares.at(i)->SimulateHare(&food, (food / hares.size()) * 1.1f);
+		if (hares.at(i)->IsReadyToProcreate()) 
 		{
-			deadHares.push_back(hares.at(i));
+			if (hares.at(i)->IsHareMale()) maleHaresToProcreate.push_back(hares.at(i));
+			else femaleHaresToProcreate.push_back(hares.at(i));
+		}
+
+		int litters = hares.at(i)->ManagePregnacy();
+		if (litters > 0)
+		{
+			int motherGenotype[2] = { hares.at(i)->furGenotype[0],hares.at(i)->furGenotype[1]};
+			int FatherGenotype[2] = { hares.at(i)->fatherfurGenotype[0],hares.at(i)->fatherfurGenotype[1] };
+			int chess[4][2] =
+			{
+				{motherGenotype[0],FatherGenotype[0]},
+				{motherGenotype[1],FatherGenotype[0]},
+				{motherGenotype[0],FatherGenotype[1]},
+				{motherGenotype[1],FatherGenotype[1]}
+			};
+
+			for (int h = 0; h < litters; h++) 
+			{
+				int type = (int)(rand() % 4);
+				AddHare(new Hare(chess[type][0], chess[type][1]));
+			}
 		}
 	}
-	hares.clear();
 
-	for (int i = 0; i < haresAlive.size(); i++)
+	for (int i = 0; i < maleHaresToProcreate.size() && i < femaleHaresToProcreate.size(); i++) 
 	{
-		hares.push_back(haresAlive.at(i));
+		maleHaresToProcreate.at(i)->HaveSex(femaleHaresToProcreate.at(i));
+		femaleHaresToProcreate.at(i)->HaveSex(maleHaresToProcreate.at(i));
 	}
-	haresAlive.clear();
 
-	for (int i = 0; i < deadHares.size(); i++)
+	// Usuwanie martwych zaj¹czków
+	for (int i = 0; i < hares.size(); i++)
 	{
-		delete deadHares.at(i);
+		if (!hares.at(i)->IsAlive())
+		{
+			delete hares.at(i);
+		}
 	}
-	deadHares.clear();
 
-	if(food<maxFood) food += foodRegen;
+	// Wyczyszczenie listy zdech³ych zaj¹czków
+	hares.erase(std::remove_if(hares.begin(), hares.end(), [](Hare* hare) { return !hare->IsAlive(); }), hares.end());
+
+	if (food < maxFood) food += foodRegen;
 }
+
+void Tile::SimulateMove()
+{
+	int a = int(this);
+	int b = int(neighbors[0]);
+	std::cout << "From <"+std::to_string(a) + "> to <" + std::to_string(b) + ">" << std::endl;
+	auto i = hares.begin();
+	while(i != hares.end())
+	{
+		if (*i == nullptr) 
+		{
+			i++;
+			continue;
+		}
+		
+		int moveVector = (*i)->GetMoveVector();
+
+		if (moveVector >= 1 && moveVector <= 4 && neighbors[moveVector - 1] != nullptr)
+		{
+			neighbors[moveVector - 1]->AddHare(*i);
+			hares.erase(i);
+		}
+		else
+		{
+			i++;
+		}
+	}
+}
+
+
 
 bool Tile::IsClicked(int x, int y)
 {
-	int recX = rectangle->getPosition().x;
-	int recY = rectangle->getPosition().y;
-	int sizeX = rectangle->getGlobalBounds().getSize().x;
-	int sizeY = rectangle->getGlobalBounds().getSize().y;
+	int recX= rectangle->getPosition().x;
+	int recY= rectangle->getPosition().y;
+	int sizeX= rectangle->getGlobalBounds().getSize().x;
+	int sizeY= rectangle->getGlobalBounds().getSize().y;
 
 	return (x >= recX && x <= (recX + sizeX)) && (y >= recY && y <= (recY + sizeY));
 }
 
 Hare* Tile::GetHare(int id)
 {
-	if (id < 0 || id >= hares.size()) 
-	{
-		//std::cerr << "id outside of boundaries!" << std::endl;
-		return nullptr;
-	}
+	if (id < 0 || id >= hares.size()) return nullptr;
 	return hares.at(id);
 }
 
