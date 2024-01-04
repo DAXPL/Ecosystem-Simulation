@@ -4,8 +4,9 @@
 #include "Hare.h"
 #include "Tile.h"
 #include "HarePanel.h"
+#include <sqlite3.h>
 
-const int TILES_SIZE{2};
+const int TILES_SIZE{5};
 
 const int HARE_PANELS{ 5 };
 
@@ -14,6 +15,21 @@ const int TILES_MARGIN{ 10 };
 
 int main()
 {
+    sqlite3* db;
+
+    if (sqlite3_open("example.db3", &db) != SQLITE_OK) {
+        std::cerr << "Błąd przy otwieraniu bazy danych: " << sqlite3_errmsg(db) << std::endl;
+        return 1;
+    }
+
+    const char* sql = "CREATE TABLE IF NOT EXISTS Hares (id INTEGER PRIMARY KEY, age INTEGER, fenotype0 INTEGER, fenotype1 INTEGER, gender INTEGER)";
+
+    if (sqlite3_exec(db, sql, 0, 0, 0) != SQLITE_OK) {
+        std::cerr << "Błąd przy tworzeniu tabeli: " << sqlite3_errmsg(db) << std::endl;
+        return 1;
+    }
+
+
     sf::RenderWindow window(sf::VideoMode(800, 600), "Simulation");
 
     //GENERATE UI
@@ -121,7 +137,7 @@ int main()
                             {
                                 for (int j = 0; j < TILES_SIZE; j++)
                                 {
-                                    tiles[i][j]->SimulateTile();
+                                    tiles[i][j]->SimulateTile(db);
                                 }
                             }
 
@@ -212,7 +228,9 @@ int main()
     }
 
     std::cout << "Ending simulation" << std::endl;
+    sqlite3_close(db);
     window.close();
+    
     //wyczyscic pamiec
     std::cout << "End" << std::endl;
     return 0;

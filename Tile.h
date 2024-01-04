@@ -4,6 +4,8 @@
 #include <iostream>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
+#include <sqlite3.h>
+
 class Tile
 {
 private:
@@ -25,7 +27,7 @@ public:
 	void PrintOutHares();
 	void SetPosition(int x, int y);
 	void DrawTile(sf::RenderWindow* window);
-	void SimulateTile(); 
+	void SimulateTile(sqlite3* db);
 	void SimulateMove();
 	bool IsClicked(int x, int y);
 	Hare* GetHare(int id);

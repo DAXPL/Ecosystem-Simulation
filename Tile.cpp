@@ -71,7 +71,7 @@ void Tile::DrawTile(sf::RenderWindow* window)
 	window->draw(*displayedText);
 }
 
-void Tile::SimulateTile()
+void Tile::SimulateTile(sqlite3* db)
 {
 	std::vector<Hare*> maleHaresToProcreate;
 	std::vector<Hare*> femaleHaresToProcreate;
@@ -123,6 +123,18 @@ void Tile::SimulateTile()
 	{
 		if (!hares.at(i)->IsAlive())
 		{
+			std::string insertSql = "INSERT INTO Hares (age, fenotype0, fenotype1, gender)" 
+				"VALUES ("+std::to_string(hares.at(i)->age)+", "+std::to_string(hares.at(i)->furGenotype[0])+", " + std::to_string(hares.at(i)->furGenotype[1]) + ", " + std::to_string((int)(hares.at(i)->IsHareMale())) + ")";
+			if (sqlite3_exec(db, insertSql.c_str(), 0, 0, 0) != SQLITE_OK)
+			{
+				std::cerr << "B³¹d przy dodawaniu zaj¹ca: " << sqlite3_errmsg(db) << std::endl;
+			}
+			else 
+			{
+				std::cout << "Zaj¹c dodany do bazy danych!" << std::endl;
+			}
+
+			
 			delete hares.at(i);
 		}
 	}
@@ -137,7 +149,6 @@ void Tile::SimulateMove()
 {
 	int a = int(this);
 	int b = int(neighbors[0]);
-	std::cout << "From <"+std::to_string(a) + "> to <" + std::to_string(b) + ">" << std::endl;
 	auto i = hares.begin();
 	while(i != hares.end())
 	{
@@ -160,8 +171,6 @@ void Tile::SimulateMove()
 		}
 	}
 }
-
-
 
 bool Tile::IsClicked(int x, int y)
 {
