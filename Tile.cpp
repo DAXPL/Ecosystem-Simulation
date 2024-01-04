@@ -22,13 +22,6 @@ Tile::Tile(int foodAmout, sf::Font* font, int tileSize)
 	displayedText->setCharacterSize(24);
 	displayedText->setFillColor(sf::Color::White);
 	displayedText->setStyle(sf::Text::Bold);
-
-	std::cout << "tiles" << std::endl;
-	std::cout << neighbors[0] << std::endl;
-	std::cout << neighbors[1] << std::endl;
-	std::cout << neighbors[2] << std::endl;
-	std::cout << neighbors[3] << std::endl;
-	std::cout << std::endl;
 }
 
 Tile::~Tile()
@@ -52,7 +45,7 @@ void Tile::SetTileNeighbors(Tile* left, Tile* up, Tile* right, Tile* down)
 
 void Tile::AddHare(Hare* newHare)
 {
-	hares.push_back(newHare);
+	if(newHare != nullptr) hares.push_back(newHare);
 }
 
 void Tile::PrintOutHares()
@@ -60,7 +53,7 @@ void Tile::PrintOutHares()
 	std::cout << "Liczba zajecy w "<<this<<": "<< hares.size() << std::endl;
 	for (Hare* h : hares) 
 	{
-		h->PrintOutHare();
+		if (h != nullptr)h->PrintOutHare();
 	}
 	std::cout << std::endl;
 }
@@ -73,14 +66,15 @@ void Tile::SetPosition(int x, int y)
 
 void Tile::DrawTile(sf::RenderWindow* window)
 {
-	int haresCount = hares.size();
-	displayedText->setString(std::to_string(haresCount)+'\n'+std::to_string(food));
+	displayedText->setString(std::to_string(hares.size())+'\n'+std::to_string(food));
 	window->draw(*rectangle);
 	window->draw(*displayedText);
 }
 
 void Tile::SimulateTile()
 {
+	std::vector<Hare*> maleHaresToProcreate;
+	std::vector<Hare*> femaleHaresToProcreate;
 
 	for (int i = 0; i < hares.size(); i++)
 	{
@@ -91,7 +85,17 @@ void Tile::SimulateTile()
 		}
 
 		hares.at(i)->SimulateHare(&food, (food / hares.size()) * 1.1f);
+		if (hares.at(i)->IsReadyToProcreate()) 
+		{
+			if (hares.at(i)->IsHareMale()) maleHaresToProcreate.push_back(hares.at(i));
+			else femaleHaresToProcreate.push_back(hares.at(i));
+		}
+	}
 
+	for (int i = 0; i < maleHaresToProcreate.size() && i < femaleHaresToProcreate.size(); i++) 
+	{
+		maleHaresToProcreate.at(i)->HaveSex(femaleHaresToProcreate.at(i));
+		femaleHaresToProcreate.at(i)->HaveSex(maleHaresToProcreate.at(i));
 	}
 
 	// Usuwanie martwych zaj¹czków
@@ -111,58 +115,47 @@ void Tile::SimulateTile()
 
 void Tile::SimulateMove()
 {
-	std::vector<Hare*> haresStay;
-
-	for (int i = 0; i < hares.size(); i++)
+	int a = int(this);
+	int b = int(neighbors[0]);
+	std::cout << "From <"+std::to_string(a) + "> to <" + std::to_string(b) + ">" << std::endl;
+	auto i = hares.begin();
+	while(i != hares.end())
 	{
-		int moveVector = hares.at(i)->GetMoveVector();
-		switch (moveVector)
+		if (*i == nullptr) 
 		{
-		case 1: case 2: case 3: case 4:
-			if (neighbors[moveVector - 1] != nullptr && hares.at(i) != nullptr)
-			{
-				std::cerr << moveVector << std::endl;
-				neighbors[moveVector - 1]->AddHare(hares.at(i));
-			}
-			else
-			{
-				std::cerr << "no neighbor" << std::endl;
-				haresStay.push_back(hares.at(i));
-			}
-			break;
-		default:
-			haresStay.push_back(hares.at(i));
-			break;
+			i++;
+			continue;
+		}
+		
+		int moveVector = (*i)->GetMoveVector();
+
+		if (moveVector >= 1 && moveVector <= 4 && neighbors[moveVector - 1] != nullptr)
+		{
+			neighbors[moveVector - 1]->AddHare(*i);
+			hares.erase(i);
+		}
+		else
+		{
+			i++;
 		}
 	}
-
-	// Usuñ zaj¹ce, które siê przenios³y
-	hares.erase(std::remove_if(hares.begin(), hares.end(), [&haresStay](Hare* hare) {
-		return std::find(haresStay.begin(), haresStay.end(), hare) != haresStay.end();
-		}), hares.end());
-
-	// Wyczyszczenie tymczasowej listy zywej
-	haresStay.clear();
 }
+
 
 
 bool Tile::IsClicked(int x, int y)
 {
-	int recX = rectangle->getPosition().x;
-	int recY = rectangle->getPosition().y;
-	int sizeX = rectangle->getGlobalBounds().getSize().x;
-	int sizeY = rectangle->getGlobalBounds().getSize().y;
+	int recX= rectangle->getPosition().x;
+	int recY= rectangle->getPosition().y;
+	int sizeX= rectangle->getGlobalBounds().getSize().x;
+	int sizeY= rectangle->getGlobalBounds().getSize().y;
 
 	return (x >= recX && x <= (recX + sizeX)) && (y >= recY && y <= (recY + sizeY));
 }
 
 Hare* Tile::GetHare(int id)
 {
-	if (id < 0 || id >= hares.size()) 
-	{
-		//std::cerr << "id outside of boundaries!" << std::endl;
-		return nullptr;
-	}
+	if (id < 0 || id >= hares.size()) return nullptr;
 	return hares.at(id);
 }
 

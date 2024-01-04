@@ -31,13 +31,25 @@ void Hare::SimulateHare(int* tileFood, int maxFood)
 	food += caloriesToEat;
 	
 	age++;
+	daySinceLastMate++;
 	alreadyMoveThisDay = false;
+
+	if (isPregnant) 
+	{
+		pregnacyTimeLeft--;
+		if (pregnacyTimeLeft <= 0) 
+		{
+			//create hares
+			std::cout << "END OF PREGNACY" << std::endl;
+			isPregnant = false;
+			pregnacyTimeLeft = 0;
+		}
+	} 
 }
 
 bool Hare::IsAlive()
 {
 	return food > 0 && age <= 1825; //5lat
-	//return true;//to debug movement
 }
 
 bool Hare::IsHareMale()
@@ -48,6 +60,11 @@ bool Hare::IsHareMale()
 bool Hare::IsChild()
 {
 	return age<30;
+}
+
+bool Hare::IsReadyToProcreate()
+{
+	return (food>=foodUsage) && (!isPregnant) && (daySinceLastMate>2) && (IsAlive());
 }
 
 int Hare::GetHareFurFenotype()
@@ -69,6 +86,7 @@ std::string Hare::GetHareFurFenotypeName()
 int Hare::GetMoveVector()
 {
 	int vec = rand() % 4;
+	//if (alreadyMoveThisDay || isPregnant) vec = 0;
 	if (alreadyMoveThisDay) vec = 0;
 	alreadyMoveThisDay = true;
 
@@ -77,9 +95,16 @@ int Hare::GetMoveVector()
 
 void Hare::HaveSex(Hare* partner)
 {
-	if (partner == nullptr || partner->IsChild() == true || partner->IsHareMale() == this->IsHareMale() || partner == this)
+	if (partner == nullptr || partner->IsChild() == true || partner->IsHareMale() == this->IsHareMale() || partner == this || partner->IsAlive() == false)
 	{
 		std::cerr << "You cant mate with null partner, kid, same gender hare or yourself" << std::endl;
 		return;
+	}
+	daySinceLastMate = 0;
+	std::cout << "They made love!" << std::endl;
+	if (isMale == false)
+	{
+		isPregnant = true;
+		pregnacyTimeLeft = pregnacyTime;
 	}
 }

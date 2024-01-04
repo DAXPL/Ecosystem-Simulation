@@ -5,7 +5,7 @@
 #include "Tile.h"
 #include "HarePanel.h"
 
-const int TILES_SIZE{5};
+const int TILES_SIZE{2};
 
 const int HARE_PANELS{ 5 };
 
@@ -84,11 +84,13 @@ int main()
         {
             tiles[i][j]->SetPosition(((TILES_GFX_SIZE + TILES_MARGIN) * i), ((TILES_GFX_SIZE + TILES_MARGIN) * j));
             tiles[i][j]->SetTileNeighbors(
-                tiles[(i<=0)?(TILES_SIZE -1):(i-1)]             [j],//left
-                tiles[i]                                        [(j<=0)?(TILES_SIZE-1):(j+1)],//up
-                tiles[(i >= (TILES_SIZE -1)) ? (0) : (i + 1)]   [j],//right
-                tiles[i]                                        [(j>=TILES_SIZE-1)?(0):(j-1)]//down
-                );
+                tiles[(i == 0) ? (TILES_SIZE - 1) : (i - 1)][j],   // left
+                tiles[i][(j == 0) ? (TILES_SIZE - 1) : (j - 1)],   // up
+                tiles[(i == (TILES_SIZE - 1)) ? (0) : (i + 1)][j], // right
+                tiles[i][(j == (TILES_SIZE - 1)) ? (0) : (j + 1)]  // down
+            );
+
+            std::cout << "Tile ["+ std::to_string(i) +"][" + std::to_string(j) + "] <" + std::to_string((int)(tiles[i][j])) + ">" << std::endl;
         }
     }
 
@@ -114,6 +116,7 @@ int main()
                             day++;
                             std::cout << "Day:" << std::to_string(day) << std::endl;
                             dayCounterText.setString("Simulation day:" + std::to_string(day));
+
                             for (int i = 0; i < TILES_SIZE; i++)
                             {
                                 for (int j = 0; j < TILES_SIZE; j++)

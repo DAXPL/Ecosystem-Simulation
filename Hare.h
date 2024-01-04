@@ -9,6 +9,7 @@ public:
 	bool IsAlive();
 	bool IsHareMale();
 	bool IsChild();
+	bool IsReadyToProcreate();
 	int GetHareFurFenotype();
 	std::string GetHareFurFenotypeName();
 	int hareID{0};
@@ -35,10 +36,12 @@ private:
 	bool isMale {true};
 	
 	//28-35
-	int pregnacyTIme{ 31 };
+	int pregnacyTime{ 31 };
 	int pregnacyTimeLeft{ 0 };
 
 	bool alreadyMoveThisDay{ false };
+
+	int daySinceLastMate = 0;
 	
 };
 
