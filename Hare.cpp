@@ -12,7 +12,17 @@ Hare::Hare()
 	this->furGenotype[1] = (rand() % 4);
 	this->age = (rand() % 20)+10;
 }
+Hare::Hare(int genA, int genB)
+{
+	this->isMale = (rand() % 2) == 0;
 
+	this->food = (rand() % 1500) + 600;
+	this->foodUsage = (rand() % 50) + 100;
+
+	this->furGenotype[0] = genA;
+	this->furGenotype[1] = genB;
+	this->age = 0;
+}
 void Hare::PrintOutHare()
 {
 	std::cout << this << " " << isMale << " " << food << std::endl;
@@ -33,19 +43,25 @@ void Hare::SimulateHare(int* tileFood, int maxFood)
 	age++;
 	daySinceLastMate++;
 	alreadyMoveThisDay = false;
-
-	if (isPregnant) 
+}
+int Hare::ManagePregnacy()
+{
+	if (isPregnant)
 	{
 		pregnacyTimeLeft--;
-		if (pregnacyTimeLeft <= 0) 
+		std::cout << "PREGNACY " << std::to_string(pregnacyTimeLeft) << std::endl;
+		if (pregnacyTimeLeft <= 0)
 		{
 			//create hares
 			std::cout << "END OF PREGNACY" << std::endl;
 			isPregnant = false;
 			pregnacyTimeLeft = 0;
+			return (int)((rand() % 4)+1);
 		}
-	} 
+	}
+	return 0;
 }
+
 
 bool Hare::IsAlive()
 {
@@ -64,7 +80,7 @@ bool Hare::IsChild()
 
 bool Hare::IsReadyToProcreate()
 {
-	return (food>=foodUsage) && (!isPregnant) && (daySinceLastMate>2) && (IsAlive());
+	return (food>=foodUsage) && (!isPregnant) && (daySinceLastMate>2) && (IsAlive() && (!IsChild()));
 }
 
 int Hare::GetHareFurFenotype()
@@ -106,5 +122,8 @@ void Hare::HaveSex(Hare* partner)
 	{
 		isPregnant = true;
 		pregnacyTimeLeft = pregnacyTime;
+		this->fatherfurGenotype[0] = partner->furGenotype[0];
+		this->fatherfurGenotype[1] = partner->furGenotype[1];
 	}
 }
+

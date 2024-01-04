@@ -132,6 +132,7 @@ int main()
                                     tiles[i][j]->SimulateMove();
                                 }
                             }
+
                         break;
                     }
                     break;

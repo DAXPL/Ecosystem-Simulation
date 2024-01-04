@@ -90,6 +90,26 @@ void Tile::SimulateTile()
 			if (hares.at(i)->IsHareMale()) maleHaresToProcreate.push_back(hares.at(i));
 			else femaleHaresToProcreate.push_back(hares.at(i));
 		}
+
+		int litters = hares.at(i)->ManagePregnacy();
+		if (litters > 0)
+		{
+			int motherGenotype[2] = { hares.at(i)->furGenotype[0],hares.at(i)->furGenotype[1]};
+			int FatherGenotype[2] = { hares.at(i)->fatherfurGenotype[0],hares.at(i)->fatherfurGenotype[1] };
+			int chess[4][2] =
+			{
+				{motherGenotype[0],FatherGenotype[0]},
+				{motherGenotype[1],FatherGenotype[0]},
+				{motherGenotype[0],FatherGenotype[1]},
+				{motherGenotype[1],FatherGenotype[1]}
+			};
+
+			for (int h = 0; h < litters; h++) 
+			{
+				int type = (int)(rand() % 4);
+				AddHare(new Hare(chess[type][0], chess[type][1]));
+			}
+		}
 	}
 
 	for (int i = 0; i < maleHaresToProcreate.size() && i < femaleHaresToProcreate.size(); i++) 

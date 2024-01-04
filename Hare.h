@@ -4,6 +4,7 @@ class Hare
 {
 public:
 	Hare();
+	Hare(int genA, int genB);
 	void PrintOutHare();
 	void SimulateHare(int* food, int maxFood);
 	bool IsAlive();
@@ -16,6 +17,8 @@ public:
 	int GetMoveVector();
 	void HaveSex(Hare* partner);
 
+	int ManagePregnacy();
+
 	//TESTY - POTEM HERMETYZOWAC
 	/*
 	C = 3 jest w pe³ni dominuj¹cy wzglêdem innych;  allel "czarny"
@@ -24,6 +27,8 @@ public:
 	c = 0  allelu albinotyczny
 	*/
 	int furGenotype[2] = { 0,0 };
+	//kids father Data
+	int fatherfurGenotype[2] = { 0,0 };
 	int age{ 0 };
 	int food{ 450 };
 private:
@@ -41,7 +46,6 @@ private:
 
 	bool alreadyMoveThisDay{ false };
 
-	int daySinceLastMate = 0;
-	
+	int daySinceLastMate = 0;	
 };
 
