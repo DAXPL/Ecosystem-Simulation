@@ -1,8 +1,13 @@
 #include "Hare.h"
 #include <iostream>
 
+int GetSimulationID();
+int GetNewHareID();
+
 Hare::Hare()
 {
+	this->hareID = GetNewHareID();
+
 	this->isMale = (rand() % 2)==0;
 
 	this->food = (rand() % 1500) + 600;
@@ -12,8 +17,11 @@ Hare::Hare()
 	this->furGenotype[1] = (rand() % 4);
 	this->age = (rand() % 20)+10;
 }
-Hare::Hare(int genA, int genB)
+
+Hare::Hare(int genA, int genB, int mother, int father)
 {
+	this->hareID = GetNewHareID();
+
 	this->isMale = (rand() % 2) == 0;
 
 	this->food = (rand() % 1500) + 600;
@@ -21,6 +29,10 @@ Hare::Hare(int genA, int genB)
 
 	this->furGenotype[0] = genA;
 	this->furGenotype[1] = genB;
+
+	this->hareMotherID = mother;
+	this->hareFatherID = father;
+
 	this->age = 0;
 }
 void Hare::PrintOutHare()
@@ -44,16 +56,15 @@ void Hare::SimulateHare(int* tileFood, int maxFood)
 	daySinceLastMate++;
 	alreadyMoveThisDay = false;
 }
+
 int Hare::ManagePregnacy()
 {
 	if (isPregnant)
 	{
 		pregnacyTimeLeft--;
-		std::cout << "PREGNACY " << std::to_string(pregnacyTimeLeft) << std::endl;
+
 		if (pregnacyTimeLeft <= 0)
 		{
-			//create hares
-			std::cout << "END OF PREGNACY" << std::endl;
 			isPregnant = false;
 			pregnacyTimeLeft = 0;
 			return (int)((rand() % 4)+1);
@@ -61,7 +72,6 @@ int Hare::ManagePregnacy()
 	}
 	return 0;
 }
-
 
 bool Hare::IsAlive()
 {
@@ -117,13 +127,36 @@ void Hare::HaveSex(Hare* partner)
 		return;
 	}
 	daySinceLastMate = 0;
-	std::cout << "They made love!" << std::endl;
+
 	if (isMale == false)
 	{
 		isPregnant = true;
 		pregnacyTimeLeft = pregnacyTime;
 		this->fatherfurGenotype[0] = partner->furGenotype[0];
 		this->fatherfurGenotype[1] = partner->furGenotype[1];
+		this->partnerID = partner->hareID;
+	}
+}
+
+void Hare::WriteHareToDatabase(sqlite3* db)
+{
+	std::string sAge = std::to_string(age);
+	std::string sSim = std::to_string(GetSimulationID());
+	std::string sID = std::to_string(hareID);
+	std::string sF0 = std::to_string(furGenotype[0]);
+	std::string sF1 = std::to_string(furGenotype[1]);
+	std::string sGender = std::to_string((int)(IsHareMale()));
+	std::string sMother= std::to_string(hareMotherID);
+	std::string sFather = std::to_string(hareFatherID);
+	std::string sAlive = std::to_string((int)(IsAlive()));
+
+	std::string insertSql = "INSERT INTO Hares (age, simulation, simulationID, fenotype0, fenotype1, gender, mother, father, isAlive)"
+		"VALUES (" + sAge + ", "  + sSim +", " +sID+ ", " + sF0 + ", " + sF1 + ", " + sGender + ", " + sMother + ", " + sFather + ", " + sAlive + ")";
+
+	if (sqlite3_exec(db, insertSql.c_str(), 0, 0, 0) != SQLITE_OK)
+	{
+		std::cerr << "B³¹d przy dodawaniu zaj¹ca: " << sqlite3_errmsg(db) << std::endl;
+		std::cerr << insertSql << std::endl;
 	}
 }
 

@@ -80,7 +80,6 @@ void Tile::SimulateTile(sqlite3* db)
 	{
 		if (hares.at(i) == nullptr)
 		{
-			std::cerr << "NULL HARE!" << std::endl;
 			continue;
 		}
 
@@ -107,7 +106,7 @@ void Tile::SimulateTile(sqlite3* db)
 			for (int h = 0; h < litters; h++) 
 			{
 				int type = (int)(rand() % 4);
-				AddHare(new Hare(chess[type][0], chess[type][1]));
+				AddHare(new Hare(chess[type][0], chess[type][1], hares.at(i)->hareID, hares.at(i)->partnerID));
 			}
 		}
 	}
@@ -123,16 +122,7 @@ void Tile::SimulateTile(sqlite3* db)
 	{
 		if (!hares.at(i)->IsAlive())
 		{
-			std::string insertSql = "INSERT INTO Hares (age, fenotype0, fenotype1, gender)" 
-				"VALUES ("+std::to_string(hares.at(i)->age)+", "+std::to_string(hares.at(i)->furGenotype[0])+", " + std::to_string(hares.at(i)->furGenotype[1]) + ", " + std::to_string((int)(hares.at(i)->IsHareMale())) + ")";
-			if (sqlite3_exec(db, insertSql.c_str(), 0, 0, 0) != SQLITE_OK)
-			{
-				std::cerr << "B³¹d przy dodawaniu zaj¹ca: " << sqlite3_errmsg(db) << std::endl;
-			}
-			else 
-			{
-				std::cout << "Zaj¹c dodany do bazy danych!" << std::endl;
-			}
+			hares.at(i)->WriteHareToDatabase(db);
 
 			
 			delete hares.at(i);

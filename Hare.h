@@ -1,10 +1,11 @@
 #pragma once
 #include <string>
+#include <sqlite3.h>
 class Hare
 {
 public:
 	Hare();
-	Hare(int genA, int genB);
+	Hare(int genA, int genB, int mother, int father);
 	void PrintOutHare();
 	void SimulateHare(int* food, int maxFood);
 	bool IsAlive();
@@ -16,6 +17,7 @@ public:
 	int hareID{0};
 	int GetMoveVector();
 	void HaveSex(Hare* partner);
+	void WriteHareToDatabase(sqlite3* db);
 
 	int ManagePregnacy();
 
@@ -29,6 +31,11 @@ public:
 	int furGenotype[2] = { 0,0 };
 	//kids father Data
 	int fatherfurGenotype[2] = { 0,0 };
+	int partnerID{ 0 };
+
+	int hareFatherID{ 0 };
+	int hareMotherID{ 0 };
+
 	int age{ 0 };
 	int food{ 450 };
 private:
